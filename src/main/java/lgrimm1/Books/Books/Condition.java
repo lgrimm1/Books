@@ -1,0 +1,6 @@
+package lgrimm1.Books.Books;
+
+public enum Condition {
+	PRINTED_NEW, PRINTED_GOOD, PRINTED_AVERAGE, PRINTED_POOR,
+	EBOOK_GOOD, EBOOK_AVERAGE, EBOOK_POOR
+	}

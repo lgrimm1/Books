@@ -1,13 +1,19 @@
 package lgrimm1.Books;
 
-import org.junit.jupiter.api.Test;
+import lgrimm1.Books.Series.*;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class BooksApplicationTests {
 
+	@Autowired
+	private SeriesController seriesController;
+
 	@Test
-	void contextLoads() {
+	public void contextLoads() throws Exception {
+		Assertions.assertNotNull(seriesController);
 	}
 
 }
