@@ -25,7 +25,9 @@ class ContainerEntityTest {
 
 	@Test
 	void negativeId() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new ContainerEntity(-1, "name", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new ContainerEntity(-1, "name", "remarks")));
 		Assertions.assertEquals("ID must be minimum 0.", e.getMessage());
 	}
 
@@ -41,19 +43,25 @@ class ContainerEntityTest {
 
 	@Test
 	void nullName() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new ContainerEntity(1, null, "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new ContainerEntity(1, null, "remarks")));
 		Assertions.assertEquals("Container name must exist.", e.getMessage());
 	}
 
 	@Test
 	void emptyName() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new ContainerEntity(1, "", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new ContainerEntity(1, "", "remarks")));
 		Assertions.assertEquals("Container name must exist.", e.getMessage());
 	}
 
 	@Test
 	void blankName() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new ContainerEntity(1, " ", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new ContainerEntity(1, " ", "remarks")));
 		Assertions.assertEquals("Container name must exist.", e.getMessage());
 	}
 

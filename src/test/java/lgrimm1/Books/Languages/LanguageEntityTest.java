@@ -24,7 +24,9 @@ class LanguageEntityTest {
 
 	@Test
 	void negativeId() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new LanguageEntity(-1, "name", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new LanguageEntity(-1, "name", "remarks")));
 		Assertions.assertEquals("ID must be minimum 0.", e.getMessage());
 	}
 
@@ -40,19 +42,25 @@ class LanguageEntityTest {
 
 	@Test
 	void nullName() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new LanguageEntity(1, null, "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new LanguageEntity(1, null, "remarks")));
 		Assertions.assertEquals("Language name must exist.", e.getMessage());
 	}
 
 	@Test
 	void emptyName() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new LanguageEntity(1, "", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new LanguageEntity(1, "", "remarks")));
 		Assertions.assertEquals("Language name must exist.", e.getMessage());
 	}
 
 	@Test
 	void blankName() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new LanguageEntity(1, " ", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new LanguageEntity(1, " ", "remarks")));
 		Assertions.assertEquals("Language name must exist.", e.getMessage());
 	}
 

@@ -1,15 +1,68 @@
 package lgrimm1.Books.Languages;
 
+import lgrimm1.Books.Books.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 @Service
 public class LanguageService {
 
 	private final LanguageRepository languageRepository;
+	private final BookRepository bookRepository;
 
 	@Autowired
-	public LanguageService(LanguageRepository languageRepository) {
+	public LanguageService(LanguageRepository languageRepository, BookRepository bookRepository) {
 		this.languageRepository = languageRepository;
+		this.bookRepository = bookRepository;
+	}
+
+	public LanguageEntity createNewEntity(LanguageEntity newLanguageEntity) {
+		if (languageRepository.findByName(newLanguageEntity.getName()).isPresent()) {
+			return null;
+		}
+		return languageRepository.save(newLanguageEntity);
+	}
+
+	public List<LanguageEntity> getAllEntities() {
+		return languageRepository.findAll();
+	}
+
+	public LanguageEntity getEntityById(long id) {
+		Optional<LanguageEntity> optionalLanguageEntity = languageRepository.findById(id);
+		return optionalLanguageEntity.orElse(null);
+	}
+
+	public LanguageEntity updateEntity(LanguageEntity modifiedLanguageEntity) {
+		long id = modifiedLanguageEntity.getId();
+		if (id == 0) {
+			return null;
+		}
+		if (!languageRepository.existsById(id)) {
+			return null;
+		}
+		Optional<LanguageEntity> languageEntityWithIdenticalName = languageRepository.findByName(modifiedLanguageEntity.getName());
+		if (languageEntityWithIdenticalName.isPresent() && languageEntityWithIdenticalName.get().getId() != id) {
+			return null;
+		}
+		LanguageEntity oldLanguageEntity = languageRepository.getReferenceById(id);
+		oldLanguageEntity.setName(modifiedLanguageEntity.getName());
+		oldLanguageEntity.setRemarks(modifiedLanguageEntity.getRemarks());
+		return oldLanguageEntity;
+	}
+
+	public boolean deleteEntityById(long id) {
+		if (id == 0) {
+			return false;
+		}
+		if (!languageRepository.existsById(id)) {
+			return false;
+		}
+		if (bookRepository.findByLanguageId(id).isPresent()) {
+			return false;
+		}
+		languageRepository.deleteById(id);
+		return true;
 	}
 }

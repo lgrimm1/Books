@@ -24,7 +24,9 @@ class SeriesEntityTest {
 
 	@Test
 	void negativeId() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new SeriesEntity(-1, "title", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new SeriesEntity(-1, "title", "remarks")));
 		Assertions.assertEquals("ID must be minimum 0.", e.getMessage());
 	}
 
@@ -40,19 +42,25 @@ class SeriesEntityTest {
 
 	@Test
 	void nullTitle() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new SeriesEntity(1, null, "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new SeriesEntity(1, null, "remarks")));
 		Assertions.assertEquals("Series title must exist.", e.getMessage());
 	}
 
 	@Test
 	void emptyTitle() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new SeriesEntity(1, "", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new SeriesEntity(1, "", "remarks")));
 		Assertions.assertEquals("Series title must exist.", e.getMessage());
 	}
 
 	@Test
 	void blankTitle() {
-		Exception e = Assertions.assertThrows(ValidationException.class, () -> validateBean(new SeriesEntity(1, " ", "remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new SeriesEntity(1, " ", "remarks")));
 		Assertions.assertEquals("Series title must exist.", e.getMessage());
 	}
 

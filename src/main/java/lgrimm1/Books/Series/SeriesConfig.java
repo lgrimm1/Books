@@ -11,9 +11,10 @@ public class SeriesConfig {
 	@Bean
 	CommandLineRunner commandLineRunner(SeriesRepository seriesRepository) {
 		return args -> {
-			SeriesEntity se1 = new SeriesEntity("Test Title 1", "TEST Remarks 1");
-			SeriesEntity se2 = new SeriesEntity("Test Title 2", "TEST Remarks 2");
+			SeriesEntity se1 = new SeriesEntity("Series Title 1", "Series Remarks 1");
+			SeriesEntity se2 = new SeriesEntity("Series Title 2", "Series Remarks 2");
 			seriesRepository.saveAll(List.of(se1, se2));
 		};
 	}
+
 }

@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.*;
 
+import java.util.*;
+
 @Repository
 public interface SeriesRepository extends JpaRepository<SeriesEntity, Long> {
+
+	Optional<SeriesEntity> findByTitle(String title);
 }

@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-//@RequestMapping(value = "/api/v1/series", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-@RequestMapping(value = "/api/v1/series")
+@RequestMapping(value = "/api/v1/series", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class SeriesController {
 
 	private final SeriesService seriesService;
@@ -19,27 +18,27 @@ public class SeriesController {
 	}
 
 	@PostMapping
-	public SeriesEntity create(@RequestParam SeriesEntity seriesEntity) {
-		return seriesService.create(seriesEntity);
+	public SeriesEntity create(@RequestBody SeriesEntity seriesEntity) {
+		return seriesService.createNewEntity(seriesEntity);
 	}
 
 	@GetMapping
 	public List<SeriesEntity> getAll() {
-		return seriesService.getAll();
+		return seriesService.getAllEntities();
 	}
 
 	@GetMapping("/{id}")
 	public SeriesEntity getById(@PathVariable long id) {
-		return seriesService.getById(id);
+		return seriesService.getEntityById(id);
 	}
 
 	@PutMapping
-	public SeriesEntity update(@RequestParam SeriesEntity newSeriesEntity) {
-		return seriesService.update(newSeriesEntity);
+	public SeriesEntity update(@RequestBody SeriesEntity newSeriesEntity) {
+		return seriesService.updateEntity(newSeriesEntity);
 	}
 
-	@DeleteMapping("{id}")
-	public void deleteById(@PathVariable long id) {
-		seriesService.delete(id);
+	@DeleteMapping("/{id}")
+	public boolean deleteById(@PathVariable long id) {
+		return seriesService.deleteEntityById(id);
 	}
 }
