@@ -117,7 +117,7 @@ class SeriesServiceTest {
 	void deleteAnExistingEntityButReferencedInABook() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(true);
-		when(bookRepository.findBySeriesId(2L))
+		when(bookRepository.findFirst1BySeries(2L))
 				.thenReturn(Optional.of(new BookEntity(
 						6L,
 						"Title",
@@ -138,7 +138,7 @@ class SeriesServiceTest {
 	void deleteAnExistingEntity() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(true);
-		when(bookRepository.findBySeriesId(2L))
+		when(bookRepository.findFirst1BySeries(2L))
 				.thenReturn(Optional.empty());
 		Assertions.assertTrue(seriesService.deleteEntityById(2L));
 	}

@@ -59,7 +59,7 @@ public class ContainerService {
 		if (!containerRepository.existsById(id)) {
 			return false;
 		}
-		if (bookRepository.findByContainerId(id).isPresent()) {
+		if (bookRepository.findFirst1ByContainer(id).isPresent()) {
 			return false;
 		}
 		containerRepository.deleteById(id);

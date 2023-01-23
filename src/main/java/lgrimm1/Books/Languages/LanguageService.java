@@ -59,7 +59,7 @@ public class LanguageService {
 		if (!languageRepository.existsById(id)) {
 			return false;
 		}
-		if (bookRepository.findByLanguageId(id).isPresent()) {
+		if (bookRepository.findFirst1ByLanguage(id).isPresent()) {
 			return false;
 		}
 		languageRepository.deleteById(id);

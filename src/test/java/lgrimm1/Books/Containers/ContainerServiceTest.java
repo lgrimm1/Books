@@ -113,7 +113,7 @@ class ContainerServiceTest {
 	void deleteAnExistingEntityButReferencedInABook() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(true);
-		when(bookRepository.findByContainerId(2L))
+		when(bookRepository.findFirst1ByContainer(2L))
 				.thenReturn(Optional.of(new BookEntity(
 						6L,
 						"Title",
@@ -134,7 +134,7 @@ class ContainerServiceTest {
 	void deleteAnExistingEntity() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(true);
-		when(bookRepository.findByContainerId(2L))
+		when(bookRepository.findFirst1ByContainer(2L))
 				.thenReturn(Optional.empty());
 		Assertions.assertTrue(containerService.deleteEntityById(2L));
 	}

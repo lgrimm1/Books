@@ -59,7 +59,7 @@ public class SeriesService {
 		if (!seriesRepository.existsById(id)) {
 			return false;
 		}
-		if (bookRepository.findBySeriesId(id).isPresent()) {
+		if (bookRepository.findFirst1BySeries(id).isPresent()) {
 			return false;
 		}
 		seriesRepository.deleteById(id);

@@ -115,7 +115,7 @@ class LanguageServiceTest {
 	void deleteAnExistingEntityButReferencedInABook() {
 		when(languageRepository.existsById(2L))
 				.thenReturn(true);
-		when(bookRepository.findByLanguageId(2L))
+		when(bookRepository.findFirst1ByLanguage(2L))
 				.thenReturn(Optional.of(new BookEntity(
 						6L,
 						"Title",
@@ -136,7 +136,7 @@ class LanguageServiceTest {
 	void deleteAnExistingEntity() {
 		when(languageRepository.existsById(2L))
 				.thenReturn(true);
-		when(bookRepository.findByLanguageId(2L))
+		when(bookRepository.findFirst1ByLanguage(2L))
 				.thenReturn(Optional.empty());
 		Assertions.assertTrue(languageService.deleteEntityById(2L));
 	}
