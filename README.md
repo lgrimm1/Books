@@ -1,4 +1,4 @@
-# Books (Java, backend, REST, postgres DB)
+# Books (Java, API, REST, postgres DB)
 <p>RESTful Spring.Boot API for managing books, authors and book containers.</p>
 <p>This project has been made in order to demonstrate coding capabilities of the owner.</p>
 <p>Language: Java 17</p>
