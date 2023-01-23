@@ -1,5 +1,5 @@
 # Books (Java, backend, REST, postgres DB)
-<p>RESTful Spring.Boot web application (backend, REST API) for managing books, authors and book containers.</p>
+<p>RESTful Spring.Boot API for managing books, authors and book containers.</p>
 <p>This project has been made in order to demonstrate coding capabilities of the owner.</p>
 <p>Language: Java 17</p>
 <p>Libraries: Java Core, Spring.Boot, Spring.Data JPA, Spring postgreSQL, Spring.Validation, MockMVC, Mockito</p>
