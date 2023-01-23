@@ -19,7 +19,7 @@ public class ContainerService {
 	}
 
 	public ContainerEntity createNewEntity(ContainerEntity newContainerEntity) {
-		if (containerRepository.findByName(newContainerEntity.getName()).isPresent()) {
+		if (containerRepository.findFirst1ByName(newContainerEntity.getName()).isPresent()) {
 			return null;
 		}
 		return containerRepository.save(newContainerEntity);
@@ -42,14 +42,14 @@ public class ContainerService {
 		if (!containerRepository.existsById(id)) {
 			return null;
 		}
-		Optional<ContainerEntity> containerEntityWithIdenticalName = containerRepository.findByName(modifiedContainerEntity.getName());
+		Optional<ContainerEntity> containerEntityWithIdenticalName = containerRepository.findFirst1ByName(modifiedContainerEntity.getName());
 		if (containerEntityWithIdenticalName.isPresent() && containerEntityWithIdenticalName.get().getId() != id) {
 			return null;
 		}
-		ContainerEntity oldContainerEntity = containerRepository.getReferenceById(id);
-		oldContainerEntity.setName(modifiedContainerEntity.getName());
-		oldContainerEntity.setRemarks(modifiedContainerEntity.getRemarks());
-		return oldContainerEntity;
+		ContainerEntity originalContainerEntity = containerRepository.getReferenceById(id);
+		originalContainerEntity.setName(modifiedContainerEntity.getName());
+		originalContainerEntity.setRemarks(modifiedContainerEntity.getRemarks());
+		return originalContainerEntity;
 	}
 
 	public boolean deleteEntityById(long id) {

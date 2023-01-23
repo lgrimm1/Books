@@ -1,3 +1,7 @@
+Authors
+-----
+Given name must be - for none.
+
 Series
 -----
 #1 record must be "<none>" or "<N/A>" or simply "-".

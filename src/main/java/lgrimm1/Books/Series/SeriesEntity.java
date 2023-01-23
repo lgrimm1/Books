@@ -23,7 +23,7 @@ public class SeriesEntity {
 	@Min(value = 0, message = "ID must be minimum 0.")
 	private long id;
 
-	@Column(name = "title", unique = true)
+	@Column(name = "title", nullable = false, unique = true)
 	@NotBlank(message = "Series title must exist.")
 	private String title;
 

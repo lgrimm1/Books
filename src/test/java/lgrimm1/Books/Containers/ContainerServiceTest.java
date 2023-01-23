@@ -22,95 +22,110 @@ class ContainerServiceTest {
 	}
 
 	@Test
-	void createEntityFromValidEntityButNameAlreadyExists() {
-		ContainerEntity input = new ContainerEntity(0L, "Name", "Remarks");
-		when(containerRepository.findByName("Name"))
-				.thenReturn(Optional.of(new ContainerEntity(2L, "Name", "Remarks")));
+	void createWithNotUniqueName() {
+		ContainerEntity input = new ContainerEntity(0L, "NewName", "NewRemarks");
+		when(containerRepository.findFirst1ByName("NewName"))
+				.thenReturn(Optional.of(new ContainerEntity(2L, "NewName", "Remarks")));
 		Assertions.assertNull(containerService.createNewEntity(input));
 	}
 
 	@Test
-	void createEntityFromValidEntity() {
-		ContainerEntity input = new ContainerEntity(6L, "Name", "Remarks");
+	void createWithUniqueName() {
+		ContainerEntity input = new ContainerEntity(0L, "NewName", "NewRemarks");
+		when(containerRepository.findFirst1ByName("NewName"))
+				.thenReturn(Optional.empty());
 		when(containerRepository.save(input))
-				.thenReturn(new ContainerEntity(2L, "Name", "Remarks"));
-		Assertions.assertEquals(new ContainerEntity(2L, "Name", "Remarks"), containerService.createNewEntity(input));
+				.thenReturn(new ContainerEntity(2L, "NewName", "NewRemarks"));
+		Assertions.assertEquals(new ContainerEntity(2L, "NewName", "NewRemarks"), containerService.createNewEntity(input));
 	}
 
 	@Test
-	void retrieveAllEntities() {
+	void retrieveAll() {
 		when(containerRepository.findAll())
 				.thenReturn(List.of(
-						new ContainerEntity(2L, "Name", "Remarks"),
-						new ContainerEntity(2L, "Name", "Remarks")));
+						new ContainerEntity(2L, "Name1", "Remarks1"),
+						new ContainerEntity(3L, "Name2", "Remarks2")));
 		Assertions.assertIterableEquals(List.of(
-						new ContainerEntity(2L, "Name", "Remarks"),
-						new ContainerEntity(2L, "Name", "Remarks")),
+						new ContainerEntity(2L, "Name1", "Remarks1"),
+						new ContainerEntity(3L, "Name2", "Remarks2")),
 				containerService.getAllEntities());
 	}
 
 	@Test
-	void retrieveANonExistentEntity() {
+	void retrieveNotExisting() {
 		when(containerRepository.findById(2L))
 				.thenReturn(Optional.empty());
 		Assertions.assertNull(containerService.getEntityById(2L));
 	}
 
 	@Test
-	void retrieveAnExistingEntity() {
+	void retrieveExisting() {
 		when(containerRepository.findById(2L))
 				.thenReturn(Optional.of(new ContainerEntity(2L, "Name", "Remarks")));
 		Assertions.assertEquals(new ContainerEntity(2L, "Name", "Remarks"), containerService.getEntityById(2L));
 	}
 
 	@Test
-	void updateAnEntityWithZeroId() {
+	void updateWithZeroId() {
 		Assertions.assertNull(containerService.updateEntity(new ContainerEntity(0L, "NewName", "NewRemarks")));
 	}
 
 	@Test
-	void updateANonExistentEntity() {
+	void updateNotExisting() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(false);
 		Assertions.assertNull(containerService.updateEntity(new ContainerEntity(2L, "NewName", "NewRemarks")));
 	}
 
 	@Test
-	void updateAnExistingEntityButNameAlreadyExistsInOtherEntity() {
+	void updateExistingWithNotUniqueTitle() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(true);
-		when(containerRepository.findByName("NewName"))
+		when(containerRepository.findFirst1ByName("NewName"))
 				.thenReturn(Optional.of(new ContainerEntity(6L, "NewName", "OtherRemarks")));
-		when(containerRepository.getReferenceById(2L))
-				.thenReturn(new ContainerEntity(2L, "Name", "Remarks"));
 		Assertions.assertNull(containerService.updateEntity(new ContainerEntity(2L, "NewName", "NewRemarks")));
 	}
 
 	@Test
-	void updateAnExistingEntity() {
+	void updateExistingWithUniqueTitle() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(true);
-		when(containerRepository.findByName("NewTitle"))
+		when(containerRepository.findFirst1ByName("NewName"))
 				.thenReturn(Optional.empty());
 		when(containerRepository.getReferenceById(2L))
-				.thenReturn(new ContainerEntity(2L, "Name", "Remarks"));
-		Assertions.assertEquals(new ContainerEntity(2L, "NewName", "NewRemarks"), containerService.updateEntity(new ContainerEntity(2L, "NewName", "NewRemarks")));
+				.thenReturn(new ContainerEntity(2L, "OldName", "OldRemarks"));
+		Assertions.assertEquals(
+				new ContainerEntity(2L, "NewName", "NewRemarks"),
+				containerService.updateEntity(new ContainerEntity(2L, "NewName", "NewRemarks")));
 	}
 
 	@Test
-	void deleteAnEntityWithZeroId() {
+	void updateExistingWithSameTitle() {
+		when(containerRepository.existsById(2L))
+				.thenReturn(true);
+		when(containerRepository.findFirst1ByName("NewName"))
+				.thenReturn(Optional.of(new ContainerEntity(2L, "NewName", "OtherRemarks")));
+		when(containerRepository.getReferenceById(2L))
+				.thenReturn(new ContainerEntity(2L, "NewName", "OtherRemarks"));
+		Assertions.assertEquals(
+				new ContainerEntity(2L, "NewName", "NewRemarks"),
+				containerService.updateEntity(new ContainerEntity(2L, "NewName", "NewRemarks")));
+	}
+
+	@Test
+	void deleteWithZeroId() {
 		Assertions.assertFalse(containerService.deleteEntityById(0));
 	}
 
 	@Test
-	void deleteANonExistentEntity() {
+	void deleteNotExisting() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(false);
 		Assertions.assertFalse(containerService.deleteEntityById(2L));
 	}
 
 	@Test
-	void deleteAnExistingEntityButReferencedInABook() {
+	void deleteExistingReferencedInABook() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(true);
 		when(bookRepository.findFirst1ByContainer(2L))
@@ -119,10 +134,10 @@ class ContainerServiceTest {
 						"Title",
 						List.of(1L),
 						2000,
-						2L,
-						4L,
-						List.of(3L),
 						5L,
+						2L,
+						List.of(3L),
+						4L,
 						1,
 						"Remarks",
 						Condition.EBOOK_GOOD,
@@ -131,7 +146,7 @@ class ContainerServiceTest {
 	}
 
 	@Test
-	void deleteAnExistingEntity() {
+	void deleteExistingNotReferencedInABook() {
 		when(containerRepository.existsById(2L))
 				.thenReturn(true);
 		when(bookRepository.findFirst1ByContainer(2L))

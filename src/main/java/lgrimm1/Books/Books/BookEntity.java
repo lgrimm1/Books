@@ -9,7 +9,7 @@ import java.util.*;
 
 /**
  * This class represents the Book entity.<p>
- * Connection towards Authors: m:n
+ * Connection towards Authors: 1:n
  * Connection towards Containers: 1:1
  * Connection towards Languages: 1:1
  * Connection towards Genres: 1:n

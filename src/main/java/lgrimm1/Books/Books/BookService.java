@@ -14,4 +14,17 @@ public class BookService {
 	public BookService(BookRepository bookRepository) {
 		this.bookRepository = bookRepository;
 	}
+
+	public Optional<BookEntity> findFirst1ByGenre(long genre) {
+		return bookRepository.findAll().stream()
+				.filter(bookEntity -> bookEntity.getGenres().contains(genre))
+				.findFirst();
+	}
+
+	public Optional<BookEntity> findFirst1ByAuthor(long author) {
+		return bookRepository.findAll().stream()
+				.filter(bookEntity -> bookEntity.getAuthors().contains(author))
+				.findFirst();
+	}
+
 }

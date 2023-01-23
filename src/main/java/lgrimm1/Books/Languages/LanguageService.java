@@ -19,7 +19,7 @@ public class LanguageService {
 	}
 
 	public LanguageEntity createNewEntity(LanguageEntity newLanguageEntity) {
-		if (languageRepository.findByName(newLanguageEntity.getName()).isPresent()) {
+		if (languageRepository.findFirst1ByName(newLanguageEntity.getName()).isPresent()) {
 			return null;
 		}
 		return languageRepository.save(newLanguageEntity);
@@ -42,14 +42,14 @@ public class LanguageService {
 		if (!languageRepository.existsById(id)) {
 			return null;
 		}
-		Optional<LanguageEntity> languageEntityWithIdenticalName = languageRepository.findByName(modifiedLanguageEntity.getName());
+		Optional<LanguageEntity> languageEntityWithIdenticalName = languageRepository.findFirst1ByName(modifiedLanguageEntity.getName());
 		if (languageEntityWithIdenticalName.isPresent() && languageEntityWithIdenticalName.get().getId() != id) {
 			return null;
 		}
-		LanguageEntity oldLanguageEntity = languageRepository.getReferenceById(id);
-		oldLanguageEntity.setName(modifiedLanguageEntity.getName());
-		oldLanguageEntity.setRemarks(modifiedLanguageEntity.getRemarks());
-		return oldLanguageEntity;
+		LanguageEntity originalLanguageEntity = languageRepository.getReferenceById(id);
+		originalLanguageEntity.setName(modifiedLanguageEntity.getName());
+		originalLanguageEntity.setRemarks(modifiedLanguageEntity.getRemarks());
+		return originalLanguageEntity;
 	}
 
 	public boolean deleteEntityById(long id) {

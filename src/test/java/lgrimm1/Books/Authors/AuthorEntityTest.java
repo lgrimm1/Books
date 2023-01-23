@@ -30,7 +30,6 @@ class AuthorEntityTest {
 						-1,
 						"familyname",
 						"givenname",
-						List.of(1L, 2L, 3L),
 						"remarks")));
 		Assertions.assertEquals("ID must be minimum 0.", e.getMessage());
 	}
@@ -41,7 +40,6 @@ class AuthorEntityTest {
 				0,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				"remarks")));
 	}
 
@@ -51,7 +49,6 @@ class AuthorEntityTest {
 				Long.MAX_VALUE,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				"remarks")));
 	}
 
@@ -63,7 +60,6 @@ class AuthorEntityTest {
 						1,
 						null,
 						"givenname",
-						List.of(1L, 2L, 3L),
 						"remarks")));
 		Assertions.assertEquals("Family (company) name must exist.", e.getMessage());
 	}
@@ -76,7 +72,6 @@ class AuthorEntityTest {
 						1,
 						"",
 						"givenname",
-						List.of(1L, 2L, 3L),
 						"remarks")));
 		Assertions.assertEquals("Family (company) name must exist.", e.getMessage());
 	}
@@ -89,7 +84,6 @@ class AuthorEntityTest {
 						1,
 						" ",
 						"givenname",
-						List.of(1L, 2L, 3L),
 						"remarks")));
 		Assertions.assertEquals("Family (company) name must exist.", e.getMessage());
 	}
@@ -100,38 +94,43 @@ class AuthorEntityTest {
 				1,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				"remarks")));
 	}
 
 	@Test
 	void nullGivenName() {
-		Assertions.assertDoesNotThrow(() -> validateBean(new AuthorEntity(
-				1,
-				"familyname",
-				null,
-				List.of(1L, 2L, 3L),
-				"remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new AuthorEntity(
+						1,
+						"familyname",
+						null,
+						"remarks")));
+		Assertions.assertEquals("Given name must exist, use - for none.", e.getMessage());
 	}
 
 	@Test
 	void emptyGivenName() {
-		Assertions.assertDoesNotThrow(() -> validateBean(new AuthorEntity(
-				1,
-				"familyname",
-				"",
-				List.of(1L, 2L, 3L),
-				"remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new AuthorEntity(
+						1,
+						"familyname",
+						"",
+						"remarks")));
+		Assertions.assertEquals("Given name must exist, use - for none.", e.getMessage());
 	}
 
 	@Test
 	void blankGivenName() {
-		Assertions.assertDoesNotThrow(() -> validateBean(new AuthorEntity(
-				1,
-				"familyname",
-				" ",
-				List.of(1L, 2L, 3L),
-				"remarks")));
+		Exception e = Assertions.assertThrows(
+				ValidationException.class,
+				() -> validateBean(new AuthorEntity(
+						1,
+						"familyname",
+						" ",
+						"remarks")));
+		Assertions.assertEquals("Given name must exist, use - for none.", e.getMessage());
 	}
 
 	@Test
@@ -140,37 +139,6 @@ class AuthorEntityTest {
 				1,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
-				"remarks")));
-	}
-
-	@Test
-	void nullListOfBookIds() {
-		Assertions.assertDoesNotThrow(() -> validateBean(new AuthorEntity(
-				1,
-				"familyname",
-				"givenname",
-				null,
-				"remarks")));
-	}
-
-	@Test
-	void emptyListOfBookIds() {
-		Assertions.assertDoesNotThrow(() -> validateBean(new AuthorEntity(
-				1,
-				"familyname",
-				"givenname",
-				new ArrayList<Long>(),
-				"remarks")));
-	}
-
-	@Test
-	void existingIdsInListOfBookIds() {
-		Assertions.assertDoesNotThrow(() -> validateBean(new AuthorEntity(
-				1,
-				"familyname",
-				"givenname",
-				List.of(1L, 2L, 3L),
 				"remarks")));
 	}
 
@@ -180,7 +148,6 @@ class AuthorEntityTest {
 				1,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				null)));
 	}
 
@@ -190,7 +157,6 @@ class AuthorEntityTest {
 				1,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				"")));
 	}
 
@@ -200,7 +166,6 @@ class AuthorEntityTest {
 				1,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				" ")));
 	}
 
@@ -210,7 +175,6 @@ class AuthorEntityTest {
 				1,
 				"familyname",
 				"givenname",
-				List.of(1L, 2L, 3L),
 				"remarks")));
 	}
 }

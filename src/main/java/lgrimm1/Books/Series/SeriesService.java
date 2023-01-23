@@ -19,7 +19,7 @@ public class SeriesService {
 	}
 
 	public SeriesEntity createNewEntity(SeriesEntity newSeriesEntity) {
-		if (seriesRepository.findByTitle(newSeriesEntity.getTitle()).isPresent()) {
+		if (seriesRepository.findFirst1ByTitle(newSeriesEntity.getTitle()).isPresent()) {
 			return null;
 		}
 		return seriesRepository.save(newSeriesEntity);
@@ -42,7 +42,7 @@ public class SeriesService {
 		if (!seriesRepository.existsById(id)) {
 			return null;
 		}
-		Optional<SeriesEntity> seriesEntityWithIdenticalTitle = seriesRepository.findByTitle(modifiedSeriesEntity.getTitle());
+		Optional<SeriesEntity> seriesEntityWithIdenticalTitle = seriesRepository.findFirst1ByTitle(modifiedSeriesEntity.getTitle());
 		if (seriesEntityWithIdenticalTitle.isPresent() && seriesEntityWithIdenticalTitle.get().getId() != id) {
 			return null;
 		}

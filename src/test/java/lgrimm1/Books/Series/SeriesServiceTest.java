@@ -22,99 +22,110 @@ class SeriesServiceTest {
 	}
 
 	@Test
-	void createEntityFromValidEntityButTitleAlreadyExists() {
-		SeriesEntity input = new SeriesEntity(0L, "Title", "Remarks");
-		when(seriesRepository.findByTitle("Title"))
-				.thenReturn(Optional.of(new SeriesEntity(2L, "Title", "Remarks")));
+	void createWithNotUniqueTitle() {
+		SeriesEntity input = new SeriesEntity(0L, "NewTitle", "NewRemarks");
+		when(seriesRepository.findFirst1ByTitle("NewTitle"))
+				.thenReturn(Optional.of(new SeriesEntity(2L, "NewTitle", "Remarks")));
 		Assertions.assertNull(seriesService.createNewEntity(input));
 	}
 
 	@Test
-	void createEntityFromValidEntity() {
-		SeriesEntity input = new SeriesEntity(0L, "Title", "Remarks");
-		when(seriesRepository.findByTitle("Title"))
+	void createWithUniqueTitle() {
+		SeriesEntity input = new SeriesEntity(0L, "NewTitle", "NewRemarks");
+		when(seriesRepository.findFirst1ByTitle("NewTitle"))
 				.thenReturn(Optional.empty());
 		when(seriesRepository.save(input))
-				.thenReturn(new SeriesEntity(2L, "Title", "Remarks"));
-		Assertions.assertEquals(new SeriesEntity(2L, "Title", "Remarks"), seriesService.createNewEntity(input));
+				.thenReturn(new SeriesEntity(2L, "NewTitle", "NewRemarks"));
+		Assertions.assertEquals(new SeriesEntity(2L, "NewTitle", "NewRemarks"), seriesService.createNewEntity(input));
 	}
 
 	@Test
-	void retrieveAllEntities() {
+	void retrieveAll() {
 		when(seriesRepository.findAll())
 				.thenReturn(List.of(
-						new SeriesEntity(2L, "Title", "Remarks"),
-						new SeriesEntity(2L, "Title", "Remarks")));
+						new SeriesEntity(2L, "Title1", "Remarks1"),
+						new SeriesEntity(3L, "Title2", "Remarks2")));
 		Assertions.assertIterableEquals(List.of(
-				new SeriesEntity(2L, "Title", "Remarks"),
-				new SeriesEntity(2L, "Title", "Remarks")),
+				new SeriesEntity(2L, "Title1", "Remarks1"),
+				new SeriesEntity(3L, "Title2", "Remarks2")),
 				seriesService.getAllEntities());
 	}
 
 	@Test
-	void retrieveANonExistentEntity() {
+	void retrieveNotExisting() {
 		when(seriesRepository.findById(2L))
 				.thenReturn(Optional.empty());
 		Assertions.assertNull(seriesService.getEntityById(2L));
 	}
 
 	@Test
-	void retrieveAnExistingEntity() {
+	void retrieveExisting() {
 		when(seriesRepository.findById(2L))
 				.thenReturn(Optional.of(new SeriesEntity(2L, "Title", "Remarks")));
 		Assertions.assertEquals(new SeriesEntity(2L, "Title", "Remarks"), seriesService.getEntityById(2L));
 	}
 
 	@Test
-	void updateAnEntityWithZeroId() {
+	void updateWithZeroId() {
 		Assertions.assertNull(seriesService.updateEntity(new SeriesEntity(0L, "NewTitle", "NewRemarks")));
 	}
 
 	@Test
-	void updateANonExistentEntity() {
+	void updateNotExisting() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(false);
 		Assertions.assertNull(seriesService.updateEntity(new SeriesEntity(2L, "NewTitle", "NewRemarks")));
 	}
 
 	@Test
-	void updateAnExistingEntityButTitleAlreadyExistsInOtherEntity() {
+	void updateExistingWithNotUniqueTitle() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(true);
-		when(seriesRepository.findByTitle("NewTitle"))
+		when(seriesRepository.findFirst1ByTitle("NewTitle"))
 				.thenReturn(Optional.of(new SeriesEntity(6L, "NewTitle", "OtherRemarks")));
-		when(seriesRepository.getReferenceById(2L))
-				.thenReturn(new SeriesEntity(2L, "Title", "Remarks"));
 		Assertions.assertNull(seriesService.updateEntity(new SeriesEntity(2L, "NewTitle", "NewRemarks")));
 	}
 
 	@Test
-	void updateAnExistingEntity() {
+	void updateExistingWithUniqueTitle() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(true);
-		when(seriesRepository.findByTitle("NewTitle"))
+		when(seriesRepository.findFirst1ByTitle("NewTitle"))
 				.thenReturn(Optional.empty());
 		when(seriesRepository.getReferenceById(2L))
-				.thenReturn(new SeriesEntity(2L, "Title", "Remarks"));
+				.thenReturn(new SeriesEntity(2L, "OldTitle", "OldRemarks"));
 		Assertions.assertEquals(
 				new SeriesEntity(2L, "NewTitle", "NewRemarks"),
 				seriesService.updateEntity(new SeriesEntity(2L, "NewTitle", "NewRemarks")));
 	}
 
 	@Test
-	void deleteAnEntityWithZeroId() {
+	void updateExistingWithSameTitle() {
+		when(seriesRepository.existsById(2L))
+				.thenReturn(true);
+		when(seriesRepository.findFirst1ByTitle("NewTitle"))
+				.thenReturn(Optional.of(new SeriesEntity(2L, "NewTitle", "OtherRemarks")));
+		when(seriesRepository.getReferenceById(2L))
+				.thenReturn(new SeriesEntity(2L, "NewTitle", "OtherRemarks"));
+		Assertions.assertEquals(
+				new SeriesEntity(2L, "NewTitle", "NewRemarks"),
+				seriesService.updateEntity(new SeriesEntity(2L, "NewTitle", "NewRemarks")));
+	}
+
+	@Test
+	void deleteWithZeroId() {
 		Assertions.assertFalse(seriesService.deleteEntityById(0));
 	}
 
 	@Test
-	void deleteANonExistentEntity() {
+	void deleteNotExisting() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(false);
 		Assertions.assertFalse(seriesService.deleteEntityById(2L));
 	}
 
 	@Test
-	void deleteAnExistingEntityButReferencedInABook() {
+	void deleteExistingReferencedInABook() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(true);
 		when(bookRepository.findFirst1BySeries(2L))
@@ -135,7 +146,7 @@ class SeriesServiceTest {
 	}
 
 	@Test
-	void deleteAnExistingEntity() {
+	void deleteExistingNotReferencedInABook() {
 		when(seriesRepository.existsById(2L))
 				.thenReturn(true);
 		when(bookRepository.findFirst1BySeries(2L))

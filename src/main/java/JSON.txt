@@ -16,7 +16,13 @@ PUT     /api/v1/languages       request body: {"id": <long>, "name": <String>, "
                                 response body: {"id": <long>, "name": <String>, "remarks": <String>}
 DELETE  /api/v1/languages/id    response: <true|false>
 
-//TODO /genres
+POST    /api/v1/genres      request body: {"id": <long>, "name": <String>, "remarks": <String>}
+                            response body: {"id": <long>, "name": <String>, "remarks": <String>}
+GET     /api/v1/genres      response body: [{"id": <long>, "name": <String>, "remarks": <String>}, ...]
+GET     /api/v1/genres/id   response body: {"id": <long>, "name": <String>, "remarks": <String>}
+PUT     /api/v1/genres      request body: {"id": <long>, "name": <String>, "remarks": <String>}
+                            response body: {"id": <long>, "name": <String>, "remarks": <String>}
+DELETE  /api/v1/genres/id   response: <true|false>
 
 POST    /api/v1/containers      request body: {"id": <long>, "name": <String>, "remarks": <String>}
                                 response body: {"id": <long>, "name": <String>, "remarks": <String>}
@@ -28,4 +34,10 @@ DELETE  /api/v1/containers/id   response: <true|false>
 
 //TODO /books
 
-//TODO /authors
+POST    /api/v1/authors     request body: {"id": <long>, "familyName": <String>, "givenName": <String>, "remarks": <String>}
+                            response body: {"id": <long>, "familyName": <String>, "givenName": <String>, "remarks": <String>}
+GET     /api/v1/authors     response body: [{"id": <long>, "familyName": <String>, "givenName": <String>, "remarks": <String>}, ...]
+GET     /api/v1/authors/id  response body: {"id": <long>, "familyName": <String>, "givenName": <String>, "remarks": <String>}
+PUT     /api/v1/authors     request body: {"id": <long>, "familyName": <String>, "givenName": <String>, "remarks": <String>}
+                            response body: {"id": <long>, "familyName": <String>, "givenName": <String>, "remarks": <String>}
+DELETE  /api/v1/authors/id  response: <true|false>

@@ -1,6 +1,6 @@
 package lgrimm1.Books.Genres;
 
-import lgrimm1.Books.Languages.*;
+import lgrimm1.Books.Books.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -10,14 +10,16 @@ import java.util.*;
 public class GenreService {
 
 	private final GenreRepository genreRepository;
+	private final BookService bookService;
 
 	@Autowired
-	public GenreService(GenreRepository genreRepository) {
+	public GenreService(GenreRepository genreRepository, BookService bookService) {
 		this.genreRepository = genreRepository;
+		this.bookService = bookService;
 	}
 
 	public GenreEntity createNewEntity(GenreEntity newGenreEntity) {
-		if (genreRepository.findByName(newGenreEntity.getName()).isPresent()) {
+		if (genreRepository.findFirst1ByName(newGenreEntity.getName()).isPresent()) {
 			return null;
 		}
 		return genreRepository.save(newGenreEntity);
@@ -40,14 +42,14 @@ public class GenreService {
 		if (!genreRepository.existsById(id)) {
 			return null;
 		}
-		Optional<GenreEntity> genreEntityWithIdenticalName = genreRepository.findByName(modifiedGenreEntity.getName());
+		Optional<GenreEntity> genreEntityWithIdenticalName = genreRepository.findFirst1ByName(modifiedGenreEntity.getName());
 		if (genreEntityWithIdenticalName.isPresent() && genreEntityWithIdenticalName.get().getId() != id) {
 			return null;
 		}
-		GenreEntity oldGenreEntity = genreRepository.getReferenceById(id);
-		oldGenreEntity.setName(modifiedGenreEntity.getName());
-		oldGenreEntity.setRemarks(modifiedGenreEntity.getRemarks());
-		return oldGenreEntity;
+		GenreEntity originalGenreEntity = genreRepository.getReferenceById(id);
+		originalGenreEntity.setName(modifiedGenreEntity.getName());
+		originalGenreEntity.setRemarks(modifiedGenreEntity.getRemarks());
+		return originalGenreEntity;
 	}
 
 	public boolean deleteEntityById(long id) {
@@ -55,6 +57,9 @@ public class GenreService {
 			return false;
 		}
 		if (!genreRepository.existsById(id)) {
+			return false;
+		}
+		if (bookService.findFirst1ByGenre(id).isPresent()) {
 			return false;
 		}
 		genreRepository.deleteById(id);
