@@ -66,8 +66,9 @@ class SeriesServiceTest {
 	}
 
 	@Test
-	void updateWithZeroId() {
+	void updateZerothOrFirstId() {
 		Assertions.assertNull(seriesService.updateEntity(new SeriesEntity(0L, "NewTitle", "NewRemarks")));
+		Assertions.assertNull(seriesService.updateEntity(new SeriesEntity(1L, "NewTitle", "NewRemarks")));
 	}
 
 	@Test
@@ -113,8 +114,9 @@ class SeriesServiceTest {
 	}
 
 	@Test
-	void deleteWithZeroId() {
+	void deleteZerothOrFirstId() {
 		Assertions.assertFalse(seriesService.deleteEntityById(0));
+		Assertions.assertFalse(seriesService.deleteEntityById(1));
 	}
 
 	@Test

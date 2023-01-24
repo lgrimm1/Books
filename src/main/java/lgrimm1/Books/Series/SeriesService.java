@@ -36,7 +36,7 @@ public class SeriesService {
 
 	public SeriesEntity updateEntity(SeriesEntity modifiedSeriesEntity) {
 		long id = modifiedSeriesEntity.getId();
-		if (id == 0) {
+		if (id == 0 || id == 1) {
 			return null;
 		}
 		if (!seriesRepository.existsById(id)) {
@@ -53,7 +53,7 @@ public class SeriesService {
 	}
 
 	public boolean deleteEntityById(long id) {
-		if (id == 0) {
+		if (id == 0 || id == 1) {
 			return false;
 		}
 		if (!seriesRepository.existsById(id)) {

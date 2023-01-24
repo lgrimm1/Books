@@ -5,11 +5,11 @@ Given name must be - for none.
 Series
 -----
 #1 record must be "<none>" or "<N/A>" or simply "-".
-#1 record must not be deleted.
+#1 record must not be deleted or updates.
 
 Genres
 -----
-Scifi
+Sci-fi
 Crime
 Fantasy
 Historical
@@ -41,13 +41,13 @@ Printed
 
 Condition
 -----
+EBOOK_GOOD
+EBOOK_AVERAGE
+EBOOK_POOR
 PRINTED_NEW
 PRINTED_GOOD
 PRINTED_AVERAGE
 PRINTED_POOR
-EBOOK_GOOD
-EBOOK_AVERAGE
-EBOOK_POOR
 
 Status
 -----
